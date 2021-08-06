@@ -297,7 +297,7 @@ namespace Any2Base64_Converter
             this.Label_ProgramName.Name = "Label_ProgramName";
             this.Label_ProgramName.Size = new System.Drawing.Size(246, 20);
             this.Label_ProgramName.TabIndex = 4;
-            this.Label_ProgramName.Text = "Any2Base64 Converter v.1.0";
+            this.Label_ProgramName.Text = "Any2Base64 Converter v.1.1";
             // 
             // pictureBox1
             // 
@@ -328,14 +328,13 @@ namespace Any2Base64_Converter
             this.TextBox_About.BackColor = System.Drawing.Color.WhiteSmoke;
             this.TextBox_About.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.TextBox_About.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.TextBox_About.Location = new System.Drawing.Point(34, 92);
+            this.TextBox_About.Location = new System.Drawing.Point(34, 71);
             this.TextBox_About.Multiline = true;
             this.TextBox_About.Name = "TextBox_About";
             this.TextBox_About.ReadOnly = true;
-            this.TextBox_About.Size = new System.Drawing.Size(649, 292);
+            this.TextBox_About.Size = new System.Drawing.Size(573, 313);
             this.TextBox_About.TabIndex = 0;
-            this.TextBox_About.Text = "Конвертер любых файлов в формат Base64 и обратно.\r\nАвтор: Банков Михаил aka PC_US" +
-    "ER.\r\nE-mail: pcuser@internet.ru\r\nGithub: https://github.com/Mikhail-Bankov";
+            this.TextBox_About.Text = resources.GetString("TextBox_About.Text");
             // 
             // Form1
             // 

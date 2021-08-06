@@ -43,17 +43,32 @@ namespace Any2Base64_Converter
             openFileDialog1.Filter = "Все файлы (*.*)|*.*"; //Ставим фильтр на любой тип файлов
 
             if (openFileDialog1.ShowDialog() == DialogResult.OK) //Если в диалоговом окне выбран файл и нажата кнопка "OK"
-            {   
-                string PathToFile = openFileDialog1.FileName; //Записываем в переменную полный путь к выбранному файлу
-                ChosenFileName = Path.GetFileNameWithoutExtension(PathToFile); //Записываем в переменную только имя выбранного файла
-                ChosenFileExtension = Path.GetExtension(PathToFile); //Записываем в переменную только расширение выбранного файла
-                TextBox_PathToFile.Text = PathToFile.ToString(); //Прописываем полный путь в TextBox_PathToFile
+            {
 
-                byte[] FileToConvert = File.ReadAllBytes(PathToFile); //Считываем выбранный файл в массив
 
-                StringBase64 = Convert.ToBase64String(FileToConvert); //Конвертируем массив в строку в формате Base64
+                var size = new FileInfo(openFileDialog1.FileName).Length; //Получаем размер выбранного файла в байтах
+                if (size > 1048576) //Если размер больше 1МБ (1048576 байт)
+                {
+                    MessageBox.Show("Допускаются файлы размером не более 1МБ!", "Внимание!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                else if (size == 0) //Если файл пустой (0 байт)
+                {
+                    MessageBox.Show("Выбран пустой файл!", "Внимание!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                else
+                {
+                    string PathToFile = openFileDialog1.FileName; //Записываем в переменную полный путь к выбранному файлу
+                    ChosenFileName = Path.GetFileNameWithoutExtension(PathToFile); //Записываем в переменную только имя выбранного файла
+                    ChosenFileExtension = Path.GetExtension(PathToFile); //Записываем в переменную только расширение выбранного файла
+                    TextBox_PathToFile.Text = PathToFile.ToString(); //Прописываем полный путь в TextBox_PathToFile
 
-                TextBox_FileToBase64.Text = StringBase64; //Заполняем TextBox_FileToBase64 получившейся строкой в формате Base64
+                    byte[] FileToConvert = File.ReadAllBytes(PathToFile); //Считываем выбранный файл в массив
+
+                    StringBase64 = Convert.ToBase64String(FileToConvert); //Конвертируем массив в строку в формате Base64
+
+                    TextBox_FileToBase64.Text = StringBase64; //Заполняем TextBox_FileToBase64 получившейся строкой в формате Base64
+                }
+
             }
         }
 
@@ -106,21 +121,39 @@ namespace Any2Base64_Converter
 
             if (openFileDialog2.ShowDialog() == DialogResult.OK) //Если в диалоговом окне выбран файл и нажата кнопка "OK"
             {
-                string PathToFile2 = openFileDialog2.FileName; //Записываем в переменную полный путь к выбранному файлу
-                ChosenFileName2 = Path.GetFileNameWithoutExtension(PathToFile2); //Записываем в переменную только имя выбранного файла
-                ChosenFileExtension2 = Path.GetExtension(PathToFile2); //Записываем в переменную только расширение выбранного файла
-                TextBox_PathToFile2.Text = PathToFile2.ToString(); //Прописываем полный путь в TextBox_PathToFile2
-
-                using (FileStream fs2 = File.OpenRead(PathToFile2)) //Создаем файловый поток и считываем выбранный файл
+                var filesize = new FileInfo(openFileDialog2.FileName).Length; //Получаем размер выбранного файла в байтах
+                if (filesize > 1398104) //Если размер больше 1,33МБ (1398104 байт), т.е. 1МБ + 33% от перевода в Base64
                 {
-                    byte[] b = new byte[2147483591]; //Создаем массив размером 2ГБ (позже надо ограничить мегабайт до 100)
-                    int c;
-                    while ((c = fs2.Read(b, 0, b.Length)) > 0) 
-                    {
-                        StringRecovered = Encoding.UTF8.GetString(b, 0, c); //Заполняем переменную StringRecovered считанной строкой в формате Base64          
-                    }
+                    MessageBox.Show("Допускаются файлы в формате Base64 размером не более 1,33МБ!", "Внимание!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-                TextBox_Base64ToFile.Text = StringRecovered; //Заполняем TextBox_Base64ToFile считанной строкой в формате Base64
+                else if (filesize == 0) //Если файл пустой (0 байт)
+                {
+                    MessageBox.Show("Выбран пустой файл!", "Внимание!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                else
+                {
+                    string PathToFile2 = openFileDialog2.FileName; //Записываем в переменную полный путь к выбранному файлу
+                    ChosenFileName2 = Path.GetFileNameWithoutExtension(PathToFile2); //Записываем в переменную только имя выбранного файла
+                    ChosenFileExtension2 = Path.GetExtension(PathToFile2); //Записываем в переменную только расширение выбранного файла
+                    TextBox_PathToFile2.Text = PathToFile2.ToString(); //Прописываем полный путь в TextBox_PathToFile2
+
+                    using (FileStream fs2 = File.OpenRead(PathToFile2)) //Создаем файловый поток и считываем выбранный файл
+                    {
+                        byte[] b = new byte[filesize]; //Создаем массив размером, равным размеру открытого файла
+                        int c;
+                        while ((c = fs2.Read(b, 0, b.Length)) > 0)
+                        {
+                            StringRecovered = Encoding.UTF8.GetString(b, 0, c); //Заполняем переменную StringRecovered считанной строкой в формате Base64          
+                        }
+                    }
+                    TextBox_Base64ToFile.Text = StringRecovered; //Заполняем TextBox_Base64ToFile считанной строкой в формате Base64
+                }
+
+
+
+
+
+
             }
         }
 
